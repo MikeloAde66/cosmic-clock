@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { calculateCosmicTime, CosmicData } from "@/lib/cosmicMath";
 import { fetchLiveNOAAData, NOAAKpData } from "@/lib/noaa";
+import { audioEngine } from "@/lib/audioEngine";
 import CosmicCanvas from "@/components/CosmicCanvas";
 
 export default function CosmicClockApp() {
   const [cosmic, setCosmic] = useState<CosmicData | null>(null);
   const [time, setTime] = useState<string>("");
+  const [isAudioActive, setIsAudioActive] = useState<boolean>(false);
   const [noaa, setNoaa] = useState<NOAAKpData>({
     kpIndex: 2.1,
     label: "SYNCING NOAA...",
@@ -22,10 +24,18 @@ export default function CosmicClockApp() {
       setTime(new Date().toUTCString());
     }, 1000);
 
-    fetchLiveNOAAData().then(setNoaa);
+    fetchLiveNOAAData().then((data) => {
+      setNoaa(data);
+      audioEngine.updateFrequency(data.kpIndex);
+    });
 
     return () => clearInterval(interval);
   }, []);
+
+  const handleAudioToggle = () => {
+    const active = audioEngine.toggle(noaa.kpIndex);
+    setIsAudioActive(active);
+  };
 
   if (!cosmic) return <div className="p-10 text-amber-400 font-mono">Loading Cosmic Clock...</div>;
 
@@ -37,11 +47,25 @@ export default function CosmicClockApp() {
       <header className="relative z-10 flex justify-between items-center border-b border-amber-500/20 pb-4 backdrop-blur-xs">
         <div>
           <h1 className="text-2xl font-bold tracking-widest text-amber-400">COSMIC ALMANAC</h1>
-          <p className="text-xs text-slate-400">REAL-TIME EPOCH &amp; JPL EPHEMERIS HUD</p>
+          <p className="text-xs text-slate-400">REAL-TIME EPOCH &amp; HARMONIC RESONANCE HUD</p>
         </div>
-        <div className="text-right text-xs text-amber-200">
-          <div>UTC: {time}</div>
-          <div className={noaa.color}>NOAA SYNC: ONLINE</div>
+        
+        <div className="flex items-center gap-6 text-right text-xs text-amber-200">
+          <button
+            onClick={handleAudioToggle}
+            className={`px-3 py-1.5 rounded border transition-all duration-300 font-semibold cursor-pointer ${
+              isAudioActive
+                ? "border-emerald-400 bg-emerald-500/20 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                : "border-amber-500/40 bg-slate-900/60 text-amber-400 hover:border-amber-400"
+            }`}
+          >
+            {isAudioActive ? "🔊 432Hz HARMONIC: ON" : "🔇 432Hz HARMONIC: OFF"}
+          </button>
+
+          <div>
+            <div>UTC: {time}</div>
+            <div className={noaa.color}>NOAA SYNC: ONLINE</div>
+          </div>
         </div>
       </header>
 
@@ -70,8 +94,8 @@ export default function CosmicClockApp() {
           <span className="text-lg text-amber-300 font-bold">~25,772 YRS</span>
         </div>
         <div className="bg-slate-900/70 p-4 rounded border border-slate-800/80">
-          <span className="text-slate-400 block mb-1">NASA JPL HORIZONS</span>
-          <span className="text-lg text-emerald-400 font-bold">SOLAR SYSTEM SYNCED</span>
+          <span className="text-slate-400 block mb-1">RESONANT TONE</span>
+          <span className="text-lg text-emerald-400 font-bold">432.0 Hz HARMONIC</span>
         </div>
         <div className="bg-slate-900/70 p-4 rounded border border-slate-800/80">
           <span className="text-slate-400 block mb-1">NOAA SPACE WEATHER</span>
