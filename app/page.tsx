@@ -51,14 +51,9 @@ export default function CosmicClockApp() {
 
       {/* Header */}
       <header className="relative z-10 flex justify-between items-start border-b border-amber-500/20 pb-4 backdrop-blur-xs">
-        <div className="space-y-2">
-          <div>
-            <h1 className="text-xl font-bold tracking-widest text-amber-400">COSMIC ALMANAC</h1>
-            <p className="text-[10px] text-slate-400">REAL-TIME EPOCH &amp; HARMONIC RESONANCE HUD</p>
-          </div>
-          
-          {/* Dropdown Birthday Converter under Title */}
-          <CosmicConverter />
+        <div>
+          <h1 className="text-xl font-bold tracking-widest text-amber-400">COSMIC ALMANAC</h1>
+          <p className="text-[10px] text-slate-400">REAL-TIME EPOCH &amp; HARMONIC RESONANCE HUD</p>
         </div>
         
         <div className="flex items-center gap-4 text-right text-xs text-amber-200">
@@ -80,22 +75,27 @@ export default function CosmicClockApp() {
         </div>
       </header>
 
-      {/* Centered, Scaled-Down Epoch Badge */}
-      <div className="relative z-10 my-auto text-center pointer-events-none">
+      {/* Left Sidebar Section: Birthday Dropdown & Epoch Badge Moved Away From Center */}
+      <div className="relative z-10 my-auto flex flex-col items-start gap-4 max-w-sm pointer-events-none">
+        <div className="pointer-events-auto">
+          <CosmicConverter />
+        </div>
+
+        {/* Repositioned Epoch Badge on the Left */}
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="pointer-events-auto group inline-block px-8 py-5 rounded-2xl border border-amber-500/30 bg-slate-950/60 backdrop-blur-md shadow-[0_0_40px_rgba(217,119,6,0.15)] hover:border-amber-400 hover:shadow-[0_0_60px_rgba(245,158,11,0.3)] transition-all duration-300 cursor-pointer"
+          className="pointer-events-auto text-left p-5 rounded-xl border border-amber-500/30 bg-slate-950/70 backdrop-blur-md shadow-[0_0_30px_rgba(217,119,6,0.15)] hover:border-amber-400 hover:shadow-[0_0_45px_rgba(245,158,11,0.25)] transition-all duration-300 cursor-pointer"
         >
-          <div className="text-[10px] tracking-widest text-amber-500 mb-1 group-hover:text-amber-300 transition-colors">
+          <div className="text-[10px] tracking-widest text-amber-500 mb-1">
             CURRENT EPOCH • <span className="underline">EXPLORE LORE</span>
           </div>
-          <div className="text-3xl font-black tracking-wider text-amber-300 group-hover:scale-105 transition-transform">
+          <div className="text-2xl font-black tracking-wider text-amber-300">
             KALI YUGA
           </div>
-          <div className="text-sm text-amber-100 mt-1">
+          <div className="text-xs text-amber-100 mt-1">
             YEAR {cosmic.kaliYugaYear.toLocaleString()} <span className="text-slate-500">/ {cosmic.kaliYugaTotal.toLocaleString()}</span>
           </div>
-          <div className="mt-2 text-[10px] text-amber-400/80 bg-amber-500/10 px-3 py-0.5 rounded-full inline-block border border-amber-500/20">
+          <div className="mt-2 text-[10px] text-amber-400/80 bg-amber-500/10 px-2.5 py-0.5 rounded-full inline-block border border-amber-500/20">
             PROGRESS: {cosmic.kaliYugaProgressPercent}%
           </div>
         </button>
