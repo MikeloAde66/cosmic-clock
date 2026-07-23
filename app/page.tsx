@@ -43,20 +43,25 @@ export default function CosmicClockApp() {
   if (!cosmic) return <div className="p-10 text-amber-400 font-mono">Loading Cosmic Clock...</div>;
 
   return (
-    <main className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-8 font-mono overflow-x-hidden">
+    <main className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-6 font-mono overflow-hidden">
       <CosmicCanvas kpIndex={noaa.kpIndex} />
 
-      {/* Story Drawer Slide-Out */}
+      {/* Slide-Out Lore Drawer */}
       <KaliYugaDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
 
-      {/* HUD Header */}
-      <header className="relative z-10 flex justify-between items-center border-b border-amber-500/20 pb-4 backdrop-blur-xs">
-        <div>
-          <h1 className="text-2xl font-bold tracking-widest text-amber-400">COSMIC ALMANAC</h1>
-          <p className="text-xs text-slate-400">REAL-TIME EPOCH &amp; HARMONIC RESONANCE HUD</p>
+      {/* Header */}
+      <header className="relative z-10 flex justify-between items-start border-b border-amber-500/20 pb-4 backdrop-blur-xs">
+        <div className="space-y-2">
+          <div>
+            <h1 className="text-xl font-bold tracking-widest text-amber-400">COSMIC ALMANAC</h1>
+            <p className="text-[10px] text-slate-400">REAL-TIME EPOCH &amp; HARMONIC RESONANCE HUD</p>
+          </div>
+          
+          {/* Dropdown Birthday Converter under Title */}
+          <CosmicConverter />
         </div>
         
-        <div className="flex items-center gap-6 text-right text-xs text-amber-200">
+        <div className="flex items-center gap-4 text-right text-xs text-amber-200">
           <button
             onClick={handleAudioToggle}
             className={`px-3 py-1.5 rounded border transition-all duration-300 font-semibold cursor-pointer ${
@@ -65,7 +70,7 @@ export default function CosmicClockApp() {
                 : "border-amber-500/40 bg-slate-900/60 text-amber-400 hover:border-amber-400"
             }`}
           >
-            {isAudioActive ? "🔊 432Hz HARMONIC: ON" : "🔇 432Hz HARMONIC: OFF"}
+            {isAudioActive ? "🔊 432Hz ON" : "🔇 432Hz OFF"}
           </button>
 
           <div>
@@ -75,50 +80,44 @@ export default function CosmicClockApp() {
         </div>
       </header>
 
-      {/* Main Interactive Centerpiece & Converter */}
-      <div className="relative z-10 my-8 space-y-8">
-        {/* Clickable Kali Yuga Central Dial */}
-        <section className="text-center">
-          <button
-            onClick={() => setIsDrawerOpen(true)}
-            className="group relative inline-block p-12 rounded-full border border-amber-500/30 bg-slate-950/50 backdrop-blur-md shadow-[0_0_60px_rgba(217,119,6,0.2)] hover:border-amber-400 hover:shadow-[0_0_80px_rgba(245,158,11,0.35)] transition-all duration-300 cursor-pointer"
-          >
-            <div className="text-xs tracking-widest text-amber-500 mb-2 group-hover:text-amber-300 transition-colors">
-              CURRENT EPOCH • <span className="underline">CLICK TO EXPLORE LORE</span>
-            </div>
-            <div className="text-5xl font-black tracking-wider text-amber-300 group-hover:scale-105 transition-transform">
-              KALI YUGA
-            </div>
-            <div className="text-xl text-amber-100 mt-2">
-              YEAR {cosmic.kaliYugaYear.toLocaleString()} <span className="text-slate-500">/ {cosmic.kaliYugaTotal.toLocaleString()}</span>
-            </div>
-            <div className="mt-4 text-xs text-amber-400/80 bg-amber-500/10 px-4 py-1 rounded-full inline-block border border-amber-500/20">
-              PROGRESS: {cosmic.kaliYugaProgressPercent}%
-            </div>
-          </button>
-        </section>
-
-        {/* Interactive Cosmic Moment Converter */}
-        <CosmicConverter />
+      {/* Centered, Scaled-Down Epoch Badge */}
+      <div className="relative z-10 my-auto text-center pointer-events-none">
+        <button
+          onClick={() => setIsDrawerOpen(true)}
+          className="pointer-events-auto group inline-block px-8 py-5 rounded-2xl border border-amber-500/30 bg-slate-950/60 backdrop-blur-md shadow-[0_0_40px_rgba(217,119,6,0.15)] hover:border-amber-400 hover:shadow-[0_0_60px_rgba(245,158,11,0.3)] transition-all duration-300 cursor-pointer"
+        >
+          <div className="text-[10px] tracking-widest text-amber-500 mb-1 group-hover:text-amber-300 transition-colors">
+            CURRENT EPOCH • <span className="underline">EXPLORE LORE</span>
+          </div>
+          <div className="text-3xl font-black tracking-wider text-amber-300 group-hover:scale-105 transition-transform">
+            KALI YUGA
+          </div>
+          <div className="text-sm text-amber-100 mt-1">
+            YEAR {cosmic.kaliYugaYear.toLocaleString()} <span className="text-slate-500">/ {cosmic.kaliYugaTotal.toLocaleString()}</span>
+          </div>
+          <div className="mt-2 text-[10px] text-amber-400/80 bg-amber-500/10 px-3 py-0.5 rounded-full inline-block border border-amber-500/20">
+            PROGRESS: {cosmic.kaliYugaProgressPercent}%
+          </div>
+        </button>
       </div>
 
-      {/* Real-Time Telemetry Footer */}
-      <footer className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-4 border-t border-amber-500/20 pt-4 text-xs backdrop-blur-xs">
-        <div className="bg-slate-900/70 p-4 rounded border border-slate-800/80">
-          <span className="text-slate-400 block mb-1">EARTH TOTAL AGE</span>
-          <span className="text-lg text-amber-300 font-bold">{cosmic.earthAgeYears.toLocaleString()} YRS</span>
+      {/* Telemetry Bar */}
+      <footer className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-3 border-t border-amber-500/20 pt-3 text-[11px] backdrop-blur-xs">
+        <div className="bg-slate-900/60 p-2.5 rounded border border-slate-800/80">
+          <span className="text-slate-400 block mb-0.5">EARTH AGE</span>
+          <span className="text-sm text-amber-300 font-bold">{cosmic.earthAgeYears.toLocaleString()} YRS</span>
         </div>
-        <div className="bg-slate-900/70 p-4 rounded border border-slate-800/80">
-          <span className="text-slate-400 block mb-1">AXIAL PRECESSION</span>
-          <span className="text-lg text-amber-300 font-bold">~25,772 YRS</span>
+        <div className="bg-slate-900/60 p-2.5 rounded border border-slate-800/80">
+          <span className="text-slate-400 block mb-0.5">AXIAL PRECESSION</span>
+          <span className="text-sm text-amber-300 font-bold">~25,772 YRS</span>
         </div>
-        <div className="bg-slate-900/70 p-4 rounded border border-slate-800/80">
-          <span className="text-slate-400 block mb-1">RESONANT TONE</span>
-          <span className="text-lg text-emerald-400 font-bold">432.0 Hz HARMONIC</span>
+        <div className="bg-slate-900/60 p-2.5 rounded border border-slate-800/80">
+          <span className="text-slate-400 block mb-0.5">RESONANT TONE</span>
+          <span className="text-sm text-emerald-400 font-bold">432.0 Hz HARMONIC</span>
         </div>
-        <div className="bg-slate-900/70 p-4 rounded border border-slate-800/80">
-          <span className="text-slate-400 block mb-1">NOAA SPACE WEATHER</span>
-          <span className={`text-lg font-bold ${noaa.color}`}>{noaa.label}</span>
+        <div className="bg-slate-900/60 p-2.5 rounded border border-slate-800/80">
+          <span className="text-slate-400 block mb-0.5">NOAA SPACE WEATHER</span>
+          <span className={`text-sm font-bold ${noaa.color}`}>{noaa.label}</span>
         </div>
       </footer>
     </main>
