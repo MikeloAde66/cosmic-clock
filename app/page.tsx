@@ -5,11 +5,14 @@ import { calculateCosmicTime, CosmicData } from "@/lib/cosmicMath";
 import { fetchLiveNOAAData, NOAAKpData } from "@/lib/noaa";
 import { audioEngine } from "@/lib/audioEngine";
 import CosmicCanvas from "@/components/CosmicCanvas";
+import CosmicConverter from "@/components/CosmicConverter";
+import KaliYugaDrawer from "@/components/KaliYugaDrawer";
 
 export default function CosmicClockApp() {
   const [cosmic, setCosmic] = useState<CosmicData | null>(null);
   const [time, setTime] = useState<string>("");
   const [isAudioActive, setIsAudioActive] = useState<boolean>(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [noaa, setNoaa] = useState<NOAAKpData>({
     kpIndex: 2.1,
     label: "SYNCING NOAA...",
@@ -40,8 +43,11 @@ export default function CosmicClockApp() {
   if (!cosmic) return <div className="p-10 text-amber-400 font-mono">Loading Cosmic Clock...</div>;
 
   return (
-    <main className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-8 font-mono overflow-hidden">
+    <main className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-8 font-mono overflow-x-hidden">
       <CosmicCanvas kpIndex={noaa.kpIndex} />
+
+      {/* Story Drawer Slide-Out */}
+      <KaliYugaDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
 
       {/* HUD Header */}
       <header className="relative z-10 flex justify-between items-center border-b border-amber-500/20 pb-4 backdrop-blur-xs">
@@ -69,19 +75,32 @@ export default function CosmicClockApp() {
         </div>
       </header>
 
-      {/* Main Epoch Dial Centerpiece */}
-      <section className="relative z-10 my-auto text-center space-y-6 pointer-events-none">
-        <div className="inline-block relative p-12 rounded-full border border-amber-500/30 bg-slate-950/40 backdrop-blur-md shadow-[0_0_60px_rgba(217,119,6,0.2)]">
-          <div className="text-sm tracking-widest text-amber-500 mb-2">CURRENT EPOCH</div>
-          <div className="text-5xl font-black tracking-wider text-amber-300">KALI YUGA</div>
-          <div className="text-xl text-amber-100 mt-2">
-            YEAR {cosmic.kaliYugaYear.toLocaleString()} <span className="text-slate-500">/ {cosmic.kaliYugaTotal.toLocaleString()}</span>
-          </div>
-          <div className="mt-4 text-xs text-amber-400/80 bg-amber-500/10 px-4 py-1 rounded-full inline-block border border-amber-500/20">
-            PROGRESS: {cosmic.kaliYugaProgressPercent}%
-          </div>
-        </div>
-      </section>
+      {/* Main Interactive Centerpiece & Converter */}
+      <div className="relative z-10 my-8 space-y-8">
+        {/* Clickable Kali Yuga Central Dial */}
+        <section className="text-center">
+          <button
+            onClick={() => setIsDrawerOpen(true)}
+            className="group relative inline-block p-12 rounded-full border border-amber-500/30 bg-slate-950/50 backdrop-blur-md shadow-[0_0_60px_rgba(217,119,6,0.2)] hover:border-amber-400 hover:shadow-[0_0_80px_rgba(245,158,11,0.35)] transition-all duration-300 cursor-pointer"
+          >
+            <div className="text-xs tracking-widest text-amber-500 mb-2 group-hover:text-amber-300 transition-colors">
+              CURRENT EPOCH • <span className="underline">CLICK TO EXPLORE LORE</span>
+            </div>
+            <div className="text-5xl font-black tracking-wider text-amber-300 group-hover:scale-105 transition-transform">
+              KALI YUGA
+            </div>
+            <div className="text-xl text-amber-100 mt-2">
+              YEAR {cosmic.kaliYugaYear.toLocaleString()} <span className="text-slate-500">/ {cosmic.kaliYugaTotal.toLocaleString()}</span>
+            </div>
+            <div className="mt-4 text-xs text-amber-400/80 bg-amber-500/10 px-4 py-1 rounded-full inline-block border border-amber-500/20">
+              PROGRESS: {cosmic.kaliYugaProgressPercent}%
+            </div>
+          </button>
+        </section>
+
+        {/* Interactive Cosmic Moment Converter */}
+        <CosmicConverter />
+      </div>
 
       {/* Real-Time Telemetry Footer */}
       <footer className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-4 border-t border-amber-500/20 pt-4 text-xs backdrop-blur-xs">
