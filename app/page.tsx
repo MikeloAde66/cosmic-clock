@@ -43,7 +43,7 @@ export default function CosmicClockApp() {
   if (!cosmic) return <div className="p-10 text-amber-400 font-mono">Loading Cosmic Clock...</div>;
 
   return (
-    <main className="relative min-h-dvh bg-slate-950 text-slate-100 flex flex-col justify-between gap-6 p-6 font-mono overflow-y-auto overflow-x-hidden touch-pan-y [-webkit-overflow-scrolling:touch]">
+    <main className="relative h-auto min-h-full overflow-visible md:min-h-dvh md:overflow-y-auto md:[-webkit-overflow-scrolling:touch] bg-slate-950 text-slate-100 flex flex-col justify-between gap-6 p-6 font-mono overflow-x-hidden touch-pan-y">
       <CosmicCanvas kpIndex={noaa.kpIndex} />
 
       {/* Slide-Out Lore Drawer */}
