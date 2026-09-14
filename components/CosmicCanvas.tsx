@@ -160,5 +160,5 @@ export default function CosmicCanvas({ kpIndex }: CanvasProps) {
     };
   }, [kpIndex]);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0 bg-slate-950" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none -z-10 bg-slate-950" />;
 }
